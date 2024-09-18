@@ -43,13 +43,12 @@ function setupGameArea() {
             this.context = this.canvas.getContext("2d");
             document.body.insertBefore(this.canvas, document.body.childNodes[0]);
             this.frameNo = 0;
-            this.interval = setInterval(updateGameArea, 20);
+            gameInterval = setInterval(updateGameArea, 20);
         },
         clear : function() {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
     };
-    myGameArea.start();
 }
 
 function setupEventListeners() {
@@ -73,13 +72,16 @@ function startGame() {
         isPaused = false;
         gameInterval = setInterval(updateGameArea, 20); // Resume the game
     } else {
-        myGameArea.start(); // Start the game for the first time
+        setupGameArea(); // Start the game for the first time
     }
 }
 
 function pauseGame() {
     isPaused = true;
     clearInterval(gameInterval); // Pause the game
+    // Optionally clear the canvas or display a pause message
+    myGameArea.clear();
+    myScore.update(); // Show the current score on pause
 }
 
 function gameObject(width, height, color, x, y, type) {
@@ -135,9 +137,12 @@ function gameObject(width, height, color, x, y, type) {
 }
 
 function updateGameArea() {
+    if (isPaused) return; // Do not update if paused
+
     var x, height, gap, minHeight, maxHeight, minGap, maxGap;
     for (i = 0; i < myObstacles.length; i += 1) {
         if (myGamePiece.crashWith(myObstacles[i])) {
+            pauseGame(); // Pause the game if a collision occurs
             return;
         } 
     }

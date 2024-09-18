@@ -19,7 +19,7 @@ var myGamePiece;
 var myObstacles = [];
 var myScore;
 var isAccelerating = false;
-var isPaused = false; // Track game pause state
+var paused = false;
 var gameInterval;
 
 function initializeGame() {
@@ -167,7 +167,19 @@ function updateGameArea() {
             character2.update();
         }
 }
+    
+function togglePause()
+{
+    if (!paused)
+    {
+        paused = true;
+    } else if (paused)
+    {
+       paused= false;
+    }
 
+}
+    
 function everyinterval(n) {
     if ((myGameArea.frameNo / n) % 1 == 0) {return true;}
     return false;
@@ -179,7 +191,7 @@ function accelerate(n) {
 </script>
 <br>
 <button onclick="startGame()">START GAME</button>
-<button onclick="pauseGame()">PAUSE/CONTINUE GAME</button>
+<button onclick="togglePause()">PAUSE/CONTINUE GAME</button>
 <p>Use the UP ARROW key to stay in the air</p>
 <p>How long can you stay alive?</p>
 </body>

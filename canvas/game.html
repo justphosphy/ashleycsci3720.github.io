@@ -15,12 +15,31 @@ canvas {
 var myGamePiece;
 var myObstacles = [];
 var myScore;
+var isAccelerating = false;
 
 function startGame() {
     myGamePiece = new gameObject(30, 30, "red", 10, 120);
+    character2 = new gameObject(20, 20, "yellow", 20, 150);
+    
     myGamePiece.gravity = 0.05;
     myScore = new gameObject("30px", "Consolas", "black", 280, 40, "text");
+
     myGameArea.start();
+
+    // Add event listeners for keyboard input
+    window.addEventListener('keydown', function(e) {
+        if (e.code === 'ArrowUp') {
+            isAccelerating = true;
+            accelerate(-0.2);
+        }
+    });
+
+    window.addEventListener('keyup', function(e) {
+        if (e.code === 'ArrowUp') {
+            isAccelerating = false;
+            accelerate(0.05);
+        }
+    });
 }
 
 var myGameArea = {
@@ -32,7 +51,7 @@ var myGameArea = {
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
         this.interval = setInterval(updateGameArea, 20);
-        },
+    },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -118,6 +137,7 @@ function updateGameArea() {
     myScore.update();
     myGamePiece.newPos();
     myGamePiece.update();
+    character2.update();
 }
 
 function everyinterval(n) {
@@ -129,9 +149,7 @@ function accelerate(n) {
     myGamePiece.gravity = n;
 }
 </script>
-<br>
-<button onmousedown="accelerate(-0.2)" onmouseup="accelerate(0.05)">ACCELERATE</button>
-<p>Use the ACCELERATE button to stay in the air</p>
+<p>Use the UP ARROW key to stay in the air</p>
 <p>How long can you stay alive?</p>
 </body>
 </html>
